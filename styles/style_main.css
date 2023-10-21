@@ -1,0 +1,76 @@
+/* ESTILOS PANTALLA PRINCIPAL PARA PANTALLA GRANDE */
+
+.image_prin > img {
+    width: 350px;
+    height: 300px;
+  }
+  
+  .image_prin {
+    text-align: center;
+  }
+  
+  /* FORM */
+  
+  form {
+    background-image: url('../images/fondo.JPG');
+    background-position: 100px;
+    padding: 1.8em;
+    color: black;
+    border-radius: 10px; 
+  }
+  
+  form > h3 {
+    text-align: center;
+  }
+  
+  .row_regis {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .column_regis {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: space-around;
+    padding: 1em;
+    background-color: #CED3DC;
+    border-radius: 10px; 
+  }
+  
+  .input-group {
+    margin: 10px; 
+  }
+  
+  label {
+    display: block;
+    font-size: 30px;
+    margin: 10px; 
+  }
+  
+  input, textarea {
+    font-size: 30px;
+    border: 1px solid #111010;
+    border-radius: 8px; 
+    padding: 10px;
+  }
+  
+  textarea {
+    width: 100%;
+    resize: none;
+    height: 100px;
+  }
+  
+  .input-bottom{
+    margin-top: 6px;
+  
+  }
+  
+  .input-bottom > input{
+    font-size: 20px;
+  }
+    
+    
+  @media (max-width: 1023px) and (min-width: 768px) {
+   
+  }
