@@ -1,4 +1,5 @@
 
+
 body {
     font-family: Arial, sans-serif;
     text-align: center;
@@ -25,7 +26,7 @@ main {
 
 #header_quiz {
     font-size: 22px;
-    color: #ff9900;
+    color: #41f6d1;
     letter-spacing: 1px;
     text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
     background-color: transparent;
@@ -43,7 +44,7 @@ main {
     text-transform: uppercase;
     color: black;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    background-color: #bfff00;
+    background-color: #ff14ff;
     border-radius: 5px;
 }
 
@@ -113,13 +114,14 @@ label input {
 
 @media screen and (min-width: 768px) {
     main {
-        width: 600px;
-        margin: 40px auto;
+        width: 400px;
+        margin: 30px auto;
+        padding: 40px;
         font-size: 18px;
     }
 
     #header_quiz {
-        font-size: 36px;
+        font-size: 32px;
     }
 
     .front_quiz {
@@ -129,7 +131,11 @@ label input {
     #startButton {
         font-size: 24px;
     }
-  
+
+    #playQuiz{
+        width: 400px;
+    }
+
     label {
         
         font-size: 22px;
