@@ -13,8 +13,7 @@
     <main>
         <div id="welcomeContainer">
             <header id="header_quiz">
-                <h1>¡Bienvenidos a "QuizzyWiz:</h1>
-                <h1>10 Preguntas Desafiantes"!</h1>
+                <h1>¡Bienvenidos a "QuizzyWiz!</h1>
             </header>
 
             <section class="front_quiz">
@@ -26,25 +25,41 @@
                     respuesta correcta.
                 <p>¿Listo para poner a prueba tus habilidades y
                     curiosidad?</p>
-                <p><strong>¡Comencemos!</strong></p>
+                <h2><strong>¡Comencemos!</strong></h2>
             </section>
         </div>
-        <button id="startButton">GO</button>
+        <button id="startButton">START GAME</button>
 
         <!-- seccion para preguntas y respuestas -->
-        <section id="playQuiz">
+        <section id="playQuiz" style="display: none;">
 
-            <div id="question_quiz">
-                <h3></h3>
-                <label><input type="radio" value="" name="res" required></label>
-                <label><input type="radio" value="" name="res" required></label>
-                <label><input type="radio" value="" name="res" required></label>
-                <label><input type="radio" value="" name="res" required></label>
-            </div>
+            <article id="question_quiz">
+                <h2></h2>
+
+                <div class="container_answ">
+                    <label class="answer-1"><input type="radio" value="1" name="res" required></label>
+                </div>
+                <div class="container_answ">
+                    <label class="answer-2"><input type="radio" value="2" name="res" required></label>
+                </div>
+                <div class="container_answ">
+                    <label class="answer-3"><input type="radio" value="3" name="res" required></label>
+                </div>
+                <div class="container_answ">
+                    <label class="answer-4"><input type="radio" value="4" name="res" required></label>
+                </div>
+
+            </article>
 
             <div id="divButton">
                 <button class="button hideCard" id="nextButton"> NEXT </button>
             </div>
+
+            <div class="results">
+                <!-- Aquí se mostrarán los resultados -->
+            </div>
+
+
 
         </section>
 

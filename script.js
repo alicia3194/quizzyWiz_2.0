@@ -1,14 +1,13 @@
-// LLAMAR AL EVENTO DE LOS BOTONES EMPEZAR Y SIGUIENTE
-
 document.addEventListener("DOMContentLoaded", function () {
-  //BOTON EMPEZAR
+  // BOTON EMPEZAR
   const startButton = document.getElementById("startButton");
 
-  //BOTON SIGUIENTE PREGUNTA
+  // BOTON SIGUIENTE PREGUNTA
   const nextButton = document.getElementById("nextButton");
 
   // REGISTRO DE LA PREGUNTA
   let questionIndex = 0;
+  let score = 0;
 
   // Función INFORMACIÓN API y GUARDAR EN LOCALST
   async function getQuestionsApi() {
@@ -38,18 +37,22 @@ document.addEventListener("DOMContentLoaded", function () {
   // OCULTAR BOTÓN EMPEZAR, TITULO Y MENSAJE BIENVENIDA"
   startButton.addEventListener("click", function () {
     getQuestionsApi();
-    // Ocultar el botón de inicio
+    // Ocultar botón start game
     startButton.style.display = "none";
 
-    // Ocultar el mensaje de bienvenida
+    // OCULTAR MENSAJE BIENVENIDA
     const welcomeContainer = document.querySelector("#welcomeContainer");
     welcomeContainer.style.display = "none";
 
-    // Mostrar el botón "Siguiente Pregunta"
+    // MOSTRAR preguntas y respuestas
+    const questionContainer = document.querySelector("#playQuiz");
+    questionContainer.style.display = "block";
+
+    // MOSTRAR BOTÓN NEXT
     nextButton.style.display = "block";
   });
 
-  // FUNCION PARA MOSTAR LAS PREGUNTAS
+  // FUNCION PARA MOSTRAR LAS PREGUNTAS
   nextButton.addEventListener("click", function () {
     // COMPROBAR QUE ALGUNA OPCION HA SIDO SELECCIONADA
     const typeAnswer = document.querySelectorAll('input[type="radio"]');
@@ -60,7 +63,9 @@ document.addEventListener("DOMContentLoaded", function () {
         answerSelected = true;
         break;
       }
-    } // UNA VEZ COMPROBADO Y QUE SEA TRUE REALIZA EL SIGUIENTE CONDICIONAL
+    }
+
+    // UNA VEZ COMPROBADO Y QUE SEA TRUE REALIZA EL SIGUIENTE CONDICIONAL
     if (answerSelected) {
       questionIndex++;
 
@@ -73,12 +78,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const section = document.getElementById("question_quiz");
         section.innerHTML = "¡HAS TERMINADO LAS PREGUNTAS DE QUIZZYWIZ!";
 
-        // OCULTAMOS BOTÓN NEXT
+        // OCULTAR BOTÓN NEXT
         nextButton.style.display = "none";
       }
     } else {
       // SI NO HA SIDO SELECCIONADA NINGUNA RESPUESTA
-      alert("Tienes que eleguir alguna respuesta");
+      alert("Tienes que elegir alguna respuesta");
     }
   });
 
@@ -96,18 +101,49 @@ document.addEventListener("DOMContentLoaded", function () {
   `;
     section.innerHTML = arrTemplateString;
   }
-
-  // Función para obtener preguntas desde el LocalStorage
-  function getQuestionsFromLocalStorage() {
-    let questionsData = localStorage.getItem("questionsData");
-    if (questionsData) {
-      return JSON.parse(questionsData);
-    }
-    return null;
-  }
 });
+
+function getQuestionsFromLocalStorage() {
+  let questionsData = localStorage.getItem("questionsData");
+  if (questionsData) {
+    return JSON.parse(questionsData);
+  }
+  return null;
+}
+
+// ***** CONSEGUIR DEJAR SELECIONADA UNA RESPUESTA CON EL COLOR ****** //
 
 // *********    FALTA VERIFICAR LAS RESPUESTAS ************ //
 
-// ***** PENSAR EN COMO QUITAR EL ESPACIO QUE SE VE DONDE VAN LAS PREGUNTAS, RESPUESTAS Y BOTON
-//       ANTES DE QUE SE PULSE GO ***** //
+// Función para obtener las respuestas seleccionadas por el usuario y las respuestas correctas
+// function getSelectedAnswers() {
+//   const selectedAnswers = [];
+//   const inputs = document.querySelectorAll('input[type="radio"]:checked');
+
+//   for (let i = 0; i < inputs.length; i++) {
+//     const input = inputs[i];
+//     const questionIndex = parseInt(input.getAttribute("name").split("_")[1]);
+//     const answer = input.value;
+
+//     selectedAnswers.push({
+//       questionIndex: questionIndex,
+//       answer: answer,
+//     });
+//   }
+
+//   return selectedAnswers;
+// }
+
+// function showResult() {
+//   let resultsSection = document.querySelector(".results");
+//   let scoresData = JSON.parse(localStorage.getItem("questionsData"));
+
+//   if (scoresData && scoresData.length > 0) {
+//     let lastScore = scoresData[scoresData.length - 1];
+//     let resultTemplate = `<p class='printResult'>${lastScore.score}</p>`;
+//     resultsSection.innerHTML = resultTemplate;
+//   }
+// }
+// ***** CONSEGUIR DEJAR SELECIONADA UNA RESPUESTA CON EL COLOR ****** //
+
+// *********    FALTA VERIFICAR LAS RESPUESTAS ************ //

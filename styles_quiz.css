@@ -1,182 +1,150 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    margin: 0;
-    padding: 0;
     text-align: center;
+    background-image: url("./movinu.gif");
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 main {
-    background-color: #fff;
-    border-radius: 10px;
+    display: block;
+    justify-content: center;
+    width: 300px;
+    margin: 20px auto;
+    padding: 16px;
+    background-color: #000000ad;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    padding: 20px;
-    margin: 20px;
-}
-/* TITULO, TEXTO BIENVENIDA Y BOTON EMPEZAR */
-#header_quiz {
-    background-color:#9893DA;
-    color: black;
-    padding: 20px;
-    font-size: 14px;
+    font-size: 10px;
+    letter-spacing: 1px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    border-radius: 10px;
+    color: #fff;
 }
 
+#header_quiz {
+    font-size: 22px;
+    color: #ff9900;
+    letter-spacing: 1px;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+    background-color: transparent;
+}
 .front_quiz {
-    background-color: #fff;
-    padding: 20px;
-    text-align: center;
-    font-size: 13px;
+    font-size: 16px;
 }
 
 #startButton {
-    background-color:#36F1CD;
-    color:black;
-    border: none;
-    padding: 10px 20px;
+    display: block;
+    margin: 20px auto;
+    padding: 10px;
+    width: 200px;
     font-size: 16px;
+    text-transform: uppercase;
+    color: black;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    background-color: #bfff00;
     border-radius: 5px;
-   
 }
 
 #startButton:hover {
-    background-color: #13C4A3;
+    background-color: #e6f704;
 }
 
-/* PREGUNTAS Y RESPUESTAS*/
 #playQuiz {
-    padding: 20px;
-    text-align: left;
+    padding: 16px;
+    color: #f0f0f0;
+    text-transform: uppercase;
+    text-align: center;
+    border-radius: 5px;
 }
 
 #question_quiz {
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    display: block;
     padding: 20px;
     margin-bottom: 20px;
-    background-color: #f9f9f9;
-    display:block;
-      
+    border-radius: 4px;
 }
 
-label {
+.container_answ label {
     display: block;
+    padding: 10px;
     margin-bottom: 10px;
     font-size: 18px;
 }
+.pregunta{
+    font-size: 20px;
+   color: #14ffc4;
 
-/* BOTÓN PARA PASAR LAS PREGUNTAS */
+}
+label {
+    display: block;
+    text-align: center;
+    font-size: 18px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+label:hover {
+    background-color: #ff14ff;
+    border-radius: 8px;
+}
+
+label input {
+    display: none;
+}
+
+
 #nextButton {
     display: none;
-    background-color: #2196F3;
     color: #fff;
-    border: none;
+    background-color: #ff14ff;
     padding: 10px 20px;
-    font-size: 20px;
+    font-size: 22px;
     border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
 }
 
 #nextButton:hover {
-    background-color: #1976D2;
+    background-color: #00eb00;
 }
 
 
 
 
-@media screen and (min-width: 1024px) {
-   
-}
-
-
-@media screen and (min-width: 768px) and (max-width: 1023px) {
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f5f5f5;
-        margin: 0;
-        padding: 0;
-        text-align: center;
-    }
-    
+@media screen and (min-width: 768px) {
     main {
-        background-color: #fff;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        padding: 20px;
-        margin: 20px;
+        width: 600px;
+        margin: 40px auto;
+        font-size: 18px;
     }
-    /* TITULO, TEXTO BIENVENIDA Y BOTON EMPEZAR */
+
     #header_quiz {
-        background-color: #ff5722;
-        color: #fff;
-        padding: 20px;
-        border-radius: 10px 10px 0 0;
-        font-size: 24px;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        font-size: 36px;
     }
-    
+
     .front_quiz {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 0 0 10px 10px;
-        text-align: left;
-        font-size: 18px;
+        font-size: 20px;
     }
-    
+
     #startButton {
-        background-color: #4caf50;
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        font-size: 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
+        font-size: 24px;
     }
-    
-    #startButton:hover {
-        background-color: #45a049;
-    }
-    
-    /* PREGUNTAS Y RESPUESTAS*/
-    #playQuiz {
-        padding: 20px;
-        text-align: left;
-    }
-    
-    #question_quiz {
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 20px;
-        margin-bottom: 20px;
-        background-color: #f9f9f9;
-        display:block;
-          
-    }
-    
+  
     label {
-        display: block;
-        margin-bottom: 10px;
-        font-size: 18px;
+        
+        font-size: 22px;
+      
     }
-    
-    /* BOTÓN PARA PASAR LAS PREGUNTAS */
     #nextButton {
-        display: none;
-        background-color: #2196F3;
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
         font-size: 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
+        
     }
+    .pregunta{
+        font-size: 30px;
     
-    #nextButton:hover {
-        background-color: #1976D2;
     }
 }
-  
+
+@media screen and (max-width: 767px) {
+ 
+}
