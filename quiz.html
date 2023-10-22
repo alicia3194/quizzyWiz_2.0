@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./styles_quiz.css">
+</head>
+
+<body>
+    <main>
+        <div id="welcomeContainer">
+            <header id="header_quiz">
+                <h1>¡Bienvenidos a "QuizzyWiz:</h1>
+                <h1>10 Preguntas Desafiantes"!</h1>
+            </header>
+
+            <section class="front_quiz">
+                <p>En este emocionante juego, pondremos a prueba tus conocimientos y habilidades.¿Cómo funciona? ¡Es
+                    sencillo!</p>
+                <p>Tendrás <strong> 10 preguntas </strong>, cada una con <strong>4 respuestas
+                    </strong>posibles. Tu objetivo
+                    es seleccionar la
+                    respuesta correcta.
+                <p>¿Listo para poner a prueba tus habilidades y
+                    curiosidad?</p>
+                <p><strong>¡Comencemos!</strong></p>
+            </section>
+        </div>
+        <button id="startButton">GO</button>
+
+        <!-- seccion para preguntas y respuestas -->
+        <section id="playQuiz">
+
+            <div id="question_quiz">
+                <h3></h3>
+                <label><input type="radio" value="" name="res" required></label>
+                <label><input type="radio" value="" name="res" required></label>
+                <label><input type="radio" value="" name="res" required></label>
+                <label><input type="radio" value="" name="res" required></label>
+            </div>
+
+            <div id="divButton">
+                <button class="button hideCard" id="nextButton"> NEXT </button>
+            </div>
+
+        </section>
+
+        <!-- https://opentdb.com/     WEB API -->
+
+    </main>
+
+
+</body>
+<script src="./script.js"></script>
+
+</html>
