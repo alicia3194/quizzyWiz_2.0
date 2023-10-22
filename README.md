@@ -1,7 +1,7 @@
-##QuizzyWiz 2.0
+QuizzyWiz 2.0
 
 
-##Objetivo
+Objetivo
 El proyecto QuizzyWiz 2.0 tiene como objetivo principal proporcionar una experiencia de cuestionario interactiva y educativa. El Quiz constará de 10 preguntas, cada una de las cuales tendrá 4 opciones de respuesta, de las cuales solo una será la correcta. Estas preguntas pueden ser tanto generadas internamente como importadas desde la API de preguntas en línea OpenTDB.
 
 La aplicación será una página de una sola vista (Single Page Application - SPA) que mostrará una pregunta a la vez en la pantalla, permitiendo a los usuarios seleccionar su respuesta.
