@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
   let questionIndex = 0;
   let score = 0;
 
+  let a = 1;
+
   // Función INFORMACIÓN API y GUARDAR EN LOCALST
   async function getQuestionsApi() {
     try {
