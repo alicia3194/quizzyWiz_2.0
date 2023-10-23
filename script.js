@@ -9,8 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
   let questionIndex = 0;
   let score = 0;
 
-  let a = 1;
-
   // Función INFORMACIÓN API y GUARDAR EN LOCALST
   async function getQuestionsApi() {
     try {
@@ -56,25 +54,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // FUNCION PARA MOSTRAR LAS PREGUNTAS
   nextButton.addEventListener("click", function () {
-    // COMPROBAR QUE ALGUNA OPCION HA SIDO SELECCIONADA
-    const typeAnswer = document.querySelectorAll('input[type="radio"]');
+    const typeAnswer = document.querySelectorAll('input[type="radio"]:checked');
+    let correctResponses = [];
+    let incorrectResponses = [];
 
-    let answerSelected = false;
-    for (let i = 0; i < typeAnswer.length; i++) {
-      if (typeAnswer[i].checked) {
-        answerSelected = true;
-        break;
-      }
-    }
-
-    // UNA VEZ COMPROBADO Y QUE SEA TRUE REALIZA EL SIGUIENTE CONDICIONAL
-    if (answerSelected) {
-      questionIndex++;
+    if (typeAnswer.length === 1) {
+      const selectedInput = typeAnswer[0];
+      const answer = selectedInput.value;
 
       const questionsData = getQuestionsFromLocalStorage();
+      const currentQuestion = questionsData[questionIndex];
 
-      // CONDICIONAL PARA COMPROBAR SI HAY MÁS PREGUNTAS ALMACENADAS
-      if (questionsData && questionIndex < questionsData.length) {
+      if (answer == currentQuestion.correctAnswer) {
+        selectedInput.parentNode.classList.add("correct");
+        correctResponses.push(currentQuestion);
+      } else {
+        selectedInput.parentNode.classList.add("incorrect");
+        incorrectResponses.push(currentQuestion);
+      }
+      if (correctResponses == answer) {
+        score += 1;
+      }
+
+      console.log(score);
+
+      questionIndex++;
+
+      if (questionIndex < questionsData.length) {
         showQuestion(questionsData, questionIndex);
       } else {
         const section = document.getElementById("question_quiz");
@@ -88,22 +94,22 @@ document.addEventListener("DOMContentLoaded", function () {
       alert("Tienes que elegir alguna respuesta");
     }
   });
+});
 
-  // MOSTRAR LAS PREGUNTAS Y RESPUESTAS
-  function showQuestion(questions, index) {
-    let section = document.getElementById("question_quiz");
-    let question = questions[index];
+// MOSTRAR LAS PREGUNTAS Y RESPUESTAS
+function showQuestion(questions, index) {
+  let section = document.getElementById("question_quiz");
+  let question = questions[index];
 
-    let arrTemplateString = `
+  let arrTemplateString = `
     <h1 class="pregunta">${question.question}</h1>
     <label><input type="radio" value="${question.correctAnswer}" name="res" required>${question.correctAnswer}</label>
     <label><input type="radio" value="${question.incorrectAnswers[0]}" name="res" required>${question.incorrectAnswers[0]}</label>
     <label><input type="radio" value="${question.incorrectAnswers[1]}" name="res" required>${question.incorrectAnswers[1]}</label>
     <label><input type="radio" value="${question.incorrectAnswers[2]}" name="res" required>${question.incorrectAnswers[2]}</label>
   `;
-    section.innerHTML = arrTemplateString;
-  }
-});
+  section.innerHTML = arrTemplateString;
+}
 
 function getQuestionsFromLocalStorage() {
   let questionsData = localStorage.getItem("questionsData");
@@ -112,6 +118,14 @@ function getQuestionsFromLocalStorage() {
   }
   return null;
 }
+
+// function answersFromLocalStorage() {
+//   let answerData = localStorage.getItem("questionsData");
+//   if (answerData) {
+//     return JSON.parse(answerData);
+//   }
+//   return null;
+// }
 
 // ***** CONSEGUIR DEJAR SELECIONADA UNA RESPUESTA CON EL COLOR ****** //
 
