@@ -1,4 +1,4 @@
-ocument.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
   // BOTON EMPEZAR
   const startButton = document.getElementById("startButton");
 
@@ -26,6 +26,14 @@ ocument.addEventListener("DOMContentLoaded", function () {
 
       // Guarda preguntas en el LocalStorage
       localStorage.setItem("questionsData", JSON.stringify(getInfo));
+      localStorage.setItem(
+        "answerCorrect",
+        JSON.stringify(getInfo.correctAnswer)
+      );
+      localStorage.setItem(
+        "answerFalse",
+        JSON.stringify(getInfo.incorrectAnswers)
+      );
 
       // Mostrar la primera pregunta
       showQuestion(getInfo, questionIndex);
@@ -68,12 +76,10 @@ ocument.addEventListener("DOMContentLoaded", function () {
       if (answer == currentQuestion.correctAnswer) {
         selectedInput.parentNode.classList.add("correct");
         correctResponses.push(currentQuestion);
+        score += 1;
       } else {
         selectedInput.parentNode.classList.add("incorrect");
         incorrectResponses.push(currentQuestion);
-      }
-      if (correctResponses == answer) {
-        score += 1;
       }
 
       console.log(score);
@@ -119,117 +125,92 @@ function getQuestionsFromLocalStorage() {
   return null;
 }
 
-// function answersFromLocalStorage() {
-//   let answerData = localStorage.getItem("questionsData");
-//   if (answerData) {
-//     return JSON.parse(answerData);
-//   }
-//   return null;
-// }
+function answersFromLocalStorage() {
+  let answerData = localStorage.getItem("answerCorrect");
+  if (answerData) {
+    return JSON.parse(answerCorrect);
+  }
+  return null;
+}
+
+function answersFromLocalStorage() {
+  let answerFal = localStorage.getItem("answerFalse");
+  if (answerFal) {
+    return JSON.parse(answerFal);
+  }
+  return null;
+}
+// *********    FALTA VERIFICAR LAS RESPUESTAS ************ //
 
 // ***** CONSEGUIR DEJAR SELECIONADA UNA RESPUESTA CON EL COLOR ****** //
 
-// *********    FALTA VERIFICAR LAS RESPUESTAS ************ //
-
-// Función para obtener las respuestas seleccionadas por el usuario y las respuestas correctas
-// function getSelectedAnswers() {
-//   const selectedAnswers = [];
-//   const inputs = document.querySelectorAll('input[type="radio"]:checked');
-
-//   for (let i = 0; i < inputs.length; i++) {
-//     const input = inputs[i];
-//     const questionIndex = parseInt(input.getAttribute("name").split("_")[1]);
-//     const answer = input.value;
-
-//     selectedAnswers.push({
-//       questionIndex: questionIndex,
-//       answer: answer,
-//     });
-//   }
-
-//   return selectedAnswers;
-// }
-
-// function showResult() {
-//   let resultsSection = document.querySelector(".results");
-//   let scoresData = JSON.parse(localStorage.getItem("questionsData"));
-
-//   if (scoresData && scoresData.length > 0) {
-//     let lastScore = scoresData[scoresData.length - 1];
-//     let resultTemplate = `<p class='printResult'>${lastScore.score}</p>`;
-//     resultsSection.innerHTML = resultTemplate;
-//   }
-// }
-// ***** CONSEGUIR DEJAR SELECIONADA UNA RESPUESTA CON EL COLOR ****** //
-
-// *********    FALTA VERIFICAR LAS RESPUESTAS ************ //
 // FUNCIONALIDAD LOGIN
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDlsqX9gEU6ToguhB0yuc1kKTtU93kcBMA",
-  authDomain: "quizii-84a42.firebaseapp.com",
-  projectId: "quizii-84a42",
-  storageBucket: "quizii-84a42.appspot.com",
-  messagingSenderId: "201517071704",
-  appId: "1:201517071704:web:f18386349818ced992f92d",
-};
+// const firebaseConfig = {
+//   apiKey: "AIzaSyDlsqX9gEU6ToguhB0yuc1kKTtU93kcBMA",
+//   authDomain: "quizii-84a42.firebaseapp.com",
+//   projectId: "quizii-84a42",
+//   storageBucket: "quizii-84a42.appspot.com",
+//   messagingSenderId: "201517071704",
+//   appId: "1:201517071704:web:f18386349818ced992f92d",
+// };
 
-firebase.initializeApp(firebaseConfig);
+// firebase.initializeApp(firebaseConfig);
 
-const createUser = (user) => {
-  db.collection("quizII")
-    .add(user)
-    .then((docRef) => console.log("Document written with ID: ", docRef.id))
-    .catch((error) => console.error("Error adding document: ", error));
-};
+// const createUser = (user) => {
+//   db.collection("quizII")
+//     .add(user)
+//     .then((docRef) => console.log("Document written with ID: ", docRef.id))
+//     .catch((error) => console.error("Error adding document: ", error));
+// };
 
-const readAllUsers = (born) => {
-  db.collection("quizII")
-    .where("first", "==", born)
-    .get(user)
-    .then((querySnapshot) => {
-      querySnapshot.forEach((user) => {
-        console.log(user.data());
-      });
-    });
-};
+// const readAllUsers = (born) => {
+//   db.collection("quizII")
+//     .where("first", "==", born)
+//     .get(user)
+//     .then((querySnapshot) => {
+//       querySnapshot.forEach((user) => {
+//         console.log(user.data());
+//       });
+//     });
+// };
 
-const signUpUser = (email, password) => {
-  firebase
-    .auth()
-    .createUserWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      let user = userCredential.user;
-      alert(`Se ha registrado ${user.email} en el sistema`);
-      createUser({
-        id: user.uid,
-        email: user.email,
-        message: "hola!",
-      });
-    })
-    .catch((error) => {
-      console.log("Error en el sistema" + error.message);
-    });
-};
+// const signUpUser = (email, password) => {
+//   firebase
+//     .auth()
+//     .createUserWithEmailAndPassword(email, password)
+//     .then((userCredential) => {
+//       let user = userCredential.user;
+//       alert(`Se ha registrado ${user.email} en el sistema`);
+//       createUser({
+//         id: user.uid,
+//         email: user.email,
+//         message: "hola!",
+//       });
+//     })
+//     .catch((error) => {
+//       console.log("Error en el sistema" + error.message);
+//     });
+// };
 
-const signInUser = (email, password) => {
-  firebase
-    .auth()
-    .signInWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      let user = userCredential.user;
-      alert(`Se ha logueado correctamente ${user.email}`);
-      console.log("USER", user);
-      window.location.href = "./question.html";
-    })
-    .catch((error) => {
-      let errorCode = error.code;
-      let errorMessage = error.message;
-      console.log(errorCode);
-      console.log(errorMessage);
-      alert(`Error en usuario o contraseña`);
-    });
-};
+// const signInUser = (email, password) => {
+//   firebase
+//     .auth()
+//     .signInWithEmailAndPassword(email, password)
+//     .then((userCredential) => {
+//       let user = userCredential.user;
+//       alert(`Se ha logueado correctamente ${user.email}`);
+//       console.log("USER", user);
+//       window.location.href = "./quiz.html";
+//     })
+//     .catch((error) => {
+//       let errorCode = error.code;
+//       let errorMessage = error.message;
+//       console.log(errorCode);
+//       console.log(errorMessage);
+//       alert(`Error en usuario o contraseña`);
+//     });
+// };
 
 // document.getElementById("form1").addEventListener("submit", function (event) {
 //   event.preventDefault();
@@ -256,17 +237,17 @@ const signInUser = (email, password) => {
 //     });
 // };
 
-document.getElementById("form2").addEventListener("submit", function (event) {
-  event.preventDefault();
-  let email = event.target.elements.email2.value;
-  let pass = event.target.elements.pass3.value;
-  signInUser(email, pass);
-});
+// document.getElementById("form2").addEventListener("submit", function (event) {
+//   event.preventDefault();
+//   let email = event.target.elements.email2.value;
+//   let pass = event.target.elements.pass3.value;
+//   signInUser(email, pass);
+// });
 
-firebase.auth().onAuthStateChanged(function (user) {
-  if (user) {
-    console.log(`Está en el sistema:${user.email} ${user.uid}`);
-  } else {
-    console.log("No hay usuarios en el sistema");
-  }
-});
+// firebase.auth().onAuthStateChanged(function (user) {
+//   if (user) {
+//     console.log(`Está en el sistema:${user.email} ${user.uid}`);
+//   } else {
+//     console.log("No hay usuarios en el sistema");
+//   }
+// });
