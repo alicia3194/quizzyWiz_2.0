@@ -31,4 +31,4 @@ Para cumplir con los objetivos establecidos, el proyecto debe cumplir con los si
 
 ## Planteamiento 
 
-<img src="trello.png" width="450" height="450"/>
+<img src="trello.png" width="550" height="450"/>
