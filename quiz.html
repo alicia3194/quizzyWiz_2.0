@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizzyWiz</title>
+    <link rel="stylesheet" href="./styles_quiz.css">
+</head>
+
+<body>
+    <main>
+        <div id="welcomeContainer">
+            <header id="header_quiz">
+                <h1>¡Bienvenidos a "QuizzyWiz!</h1>
+            </header>
+
+            <section class="front_quiz">
+                <p>En este emocionante juego, pondremos a prueba tus conocimientos y habilidades.¿Cómo funciona? ¡Es
+                    sencillo!</p>
+                <p>Tendrás <strong> 10 preguntas </strong>, cada una con <strong>4 respuestas
+                    </strong>posibles. Tu objetivo
+                    es seleccionar la
+                    respuesta correcta.
+                <p>¿Listo para poner a prueba tus habilidades y
+                    curiosidad?</p>
+                <h2><strong>¡Comencemos!</strong></h2>
+            </section>
+        </div>
+        <button id="startButton">START GAME</button>
+
+        <!-- seccion para preguntas y respuestas -->
+        <section id="playQuiz" style="display: none;">
+
+            <article id="question_quiz">
+                <h2></h2>
+
+                <div class="container_answ">
+                    <label class="answer-1"><input type="radio" value="1" name="res" required></label>
+                </div>
+                <div class="container_answ">
+                    <label class="answer-2"><input type="radio" value="2" name="res" required></label>
+                </div>
+                <div class="container_answ">
+                    <label class="answer-3"><input type="radio" value="3" name="res" required></label>
+                </div>
+                <div class="container_answ">
+                    <label class="answer-4"><input type="radio" value="4" name="res" required></label>
+                </div>
+
+            </article>
+
+            <div id="divButton">
+                <button class="button hideCard" id="nextButton"> NEXT </button>
+            </div>
+
+        </section>
+
+        <!-- https://opentdb.com/     WEB API -->
+
+    </main>
+
+
+</body>
+<script src="./script.js"></script>
+
+</html>
