@@ -1,12 +1,11 @@
-# QuizzyWiz 2.0
+# QuizzyWiz 2.0 🎮🎮
 
 
-## Objetivo
 El proyecto **QuizzyWiz 2.0** tiene como objetivo principal proporcionar una experiencia de cuestionario interactiva y educativa. El Quiz constará de 10 preguntas, cada una de las cuales tendrá 4 opciones de respuesta, de las cuales solo una será la correcta. Estas preguntas pueden ser tanto generadas internamente como importadas desde la **API** de preguntas en línea **OpenTDB**.
 
 La aplicación será una página de una sola vista (Single Page Application - SPA) que mostrará una pregunta a la vez en la pantalla, permitiendo a los usuarios seleccionar su respuesta.
 
-## Requisitos
+## Requisitos 💯
 Para cumplir con los objetivos establecidos, el proyecto debe cumplir con los siguientes requisitos:
 
 - *Manipulación dinámica del DOM:* El proyecto deberá utilizar JavaScript para modificar dinámicamente el contenido del documento HTML, mostrando preguntas y opciones de respuesta de forma interactiva.
@@ -29,6 +28,14 @@ Para cumplir con los objetivos establecidos, el proyecto debe cumplir con los si
 
 - *Desplegar la app en GitHub Pages:* La aplicación se desplegará en GitHub Pages para que sea accesible en línea.
 
-## Planteamiento 
+## Organización del Proyecto 💬
+
+En este proyecto, hemos utilizado **Trello**, una plataforma de gestión de proyectos, para organizar nuestras tareas y objetivos. Trello nos ha proporcionado una forma efectiva de seguir el progreso de nuestro proyecto y coordinar el trabajo en equipo. Hemos creado tarjetas de Trello para representar cada objetivo, tarea o funcionalidad que debemos abordar, lo que nos ha permitido mantener un seguimiento detallado de nuestras metas y plazos.
 
 <img src="trello.png" width="600" height="450"/>
+
+## Ramas y Desarrollo de Funcionalidades 🪢
+
+Para mantener nuestro proyecto organizado y garantizar un desarrollo seguro, hemos empleado un enfoque de ramas en nuestro repositorio de Git. Cada funcionalidad o característica importante se ha desarrollado en su propia rama separada antes de fusionarse con la rama principal *main*.
+
+
