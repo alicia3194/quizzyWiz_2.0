@@ -31,6 +31,4 @@ Para cumplir con los objetivos establecidos, el proyecto debe cumplir con los si
 
 ## Planteamiento 
 
-
-
-<span>![</span><span>Aquí la descripción de la imagen por si no carga</span><span>]</span><span>(</span><span>https://github.com/alicia3194/quizzyWiz_2.0/main/trello.png</span><span>)</span>
+<img src="trello.png" width="250" height="200"/>
