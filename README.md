@@ -30,3 +30,7 @@ Para cumplir con los objetivos establecidos, el proyecto debe cumplir con los si
 - *Desplegar la app en GitHub Pages:* La aplicación se desplegará en GitHub Pages para que sea accesible en línea.
 
 ## Planteamiento 
+
+
+
+<span>![</span><span>Aquí la descripción de la imagen por si no carga</span><span>]</span><span>(</span><span>https://github.com/alicia3194/quizzyWiz_2.0/main/trello.png</span><span>)</span>
