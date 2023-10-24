@@ -1,3 +1,16 @@
+const firebaseConfig = {
+  apiKey: "AIzaSyDlsqX9gEU6ToguhB0yuc1kKTtU93kcBMA",
+  authDomain: "quizii-84a42.firebaseapp.com",
+  projectId: "quizii-84a42",
+  storageBucket: "quizii-84a42.appspot.com",
+  messagingSenderId: "201517071704",
+  appId: "1:201517071704:web:f18386349818ced992f92d",
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db = firebase.firestore();
+
 document.addEventListener("DOMContentLoaded", function () {
   // BOTON EMPEZAR
   const startButton = document.getElementById("startButton");
@@ -60,26 +73,29 @@ document.addEventListener("DOMContentLoaded", function () {
     nextButton.style.display = "block";
   });
 
-  // FUNCION PARA MOSTRAR LAS PREGUNTAS
-  nextButton.addEventListener("click", function () {
+  // VALIDACIÓN
+  nextButton.addEventListener("click", async function () {
     const typeAnswer = document.querySelectorAll('input[type="radio"]:checked');
     let correctResponses = [];
     let incorrectResponses = [];
+    const questionsData = getQuestionsFromLocalStorage();
+    let points = [];
 
     if (typeAnswer.length === 1) {
       const selectedInput = typeAnswer[0];
       const answer = selectedInput.value;
 
-      const questionsData = getQuestionsFromLocalStorage();
       const currentQuestion = questionsData[questionIndex];
 
-      if (answer == currentQuestion.correctAnswer) {
+      if (answer === currentQuestion.correctAnswer) {
         selectedInput.parentNode.classList.add("correct");
-        correctResponses.push(currentQuestion);
+        correctResponses.push(answer);
         score += 1;
+        // typeAnswer.style.backgroundColor;
       } else {
         selectedInput.parentNode.classList.add("incorrect");
-        incorrectResponses.push(currentQuestion);
+        incorrectResponses.push(answer);
+        correctResponses.push(currentQuestion);
       }
 
       console.log(score);
@@ -91,13 +107,56 @@ document.addEventListener("DOMContentLoaded", function () {
       } else {
         const section = document.getElementById("question_quiz");
         section.innerHTML = "¡HAS TERMINADO LAS PREGUNTAS DE QUIZZYWIZ!";
-
         // OCULTAR BOTÓN NEXT
         nextButton.style.display = "none";
+
+        //Imprimir resultado en pantalla
+
+        if (questionIndex === questionsData.length) {
+          const totalQuestions = questionsData.length;
+          const percentage = (score / totalQuestions) * 100;
+          const section1 = document.getElementById("results");
+          section1.innerHTML = `Has acertado el ${percentage}% de las preguntas`;
+        }
+        const game = {
+          // email local
+          user: "anonimo",
+          date: new Date(),
+          score: [],
+          result: correctResponses.length,
+        };
+        await saveResults(game);
+        db.collection("results")
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              console.log(doc.id, doc.data());
+              let data = doc.data();
+              // if(doc.user == ){
+              //   points = doc.score
+              // }
+            });
+          })
+          .catch((error) => {
+            console.log("Error getting documents: ", error);
+          });
+
+        //GRÁFICA
+
+        new Chartist.Bar("#chart2", {
+          labels: [...user],
+          series: [score],
+        });
       }
     } else {
       // SI NO HA SIDO SELECCIONADA NINGUNA RESPUESTA
       alert("Tienes que elegir alguna respuesta");
+    }
+    if (questionIndex === questionsData.length) {
+      // NOTA RESULTADO
+      const totalQuestions = questionsData.length;
+      const percentage = (correctResponses.length / totalQuestions) * 100;
+      return percentage;
     }
   });
 });
@@ -106,13 +165,16 @@ document.addEventListener("DOMContentLoaded", function () {
 function showQuestion(questions, index) {
   let section = document.getElementById("question_quiz");
   let question = questions[index];
+  //Respuestas orden aleatorio
+  let mixedAnswers = [question.correctAnswer, ...question.incorrectAnswers];
+  mixedAnswers.sort(() => Math.random() - 0.5);
 
   let arrTemplateString = `
-    <h1 class="pregunta">${question.question}</h1>
-    <label><input type="radio" value="${question.correctAnswer}" name="res" required>${question.correctAnswer}</label>
-    <label><input type="radio" value="${question.incorrectAnswers[0]}" name="res" required>${question.incorrectAnswers[0]}</label>
-    <label><input type="radio" value="${question.incorrectAnswers[1]}" name="res" required>${question.incorrectAnswers[1]}</label>
-    <label><input type="radio" value="${question.incorrectAnswers[2]}" name="res" required>${question.incorrectAnswers[2]}</label>
+    <h3 class="pregunta">${question.question}</h3>
+    <label><input type="radio" value="${mixedAnswers[0]}" name="res" required>${mixedAnswers[0]}</label>
+    <label><input type="radio" value="${mixedAnswers[1]}" name="res" required>${mixedAnswers[1]}</label>
+    <label><input type="radio" value="${mixedAnswers[2]}" name="res" required>${mixedAnswers[2]}</label>
+    <label><input type="radio" value="${mixedAnswers[3]}" name="res" required>${mixedAnswers[3]}</label>
   `;
   section.innerHTML = arrTemplateString;
 }
@@ -125,13 +187,9 @@ function getQuestionsFromLocalStorage() {
   return null;
 }
 
-function answersFromLocalStorage() {
-  let answerData = localStorage.getItem("answerCorrect");
-  if (answerData) {
-    return JSON.parse(answerCorrect);
-  }
-  return null;
-}
+// ***** CONSEGUIR DEJAR SELECIONADA UNA RESPUESTA CON EL COLOR ****** //
+
+// ***** CONSEGUIR DEJAR SELECIONADA UNA RESPUESTA CON EL COLOR ****** //
 
 function answersFromLocalStorage() {
   let answerFal = localStorage.getItem("answerFalse");
@@ -144,73 +202,74 @@ function answersFromLocalStorage() {
 
 // ***** CONSEGUIR DEJAR SELECIONADA UNA RESPUESTA CON EL COLOR ****** //
 
-// FUNCIONALIDAD LOGIN
+// FUNCIONALIDAD LOGINimport { getDatabase, ref, onValue } from "firebase/database";
 
-// const firebaseConfig = {
-//   apiKey: "AIzaSyDlsqX9gEU6ToguhB0yuc1kKTtU93kcBMA",
-//   authDomain: "quizii-84a42.firebaseapp.com",
-//   projectId: "quizii-84a42",
-//   storageBucket: "quizii-84a42.appspot.com",
-//   messagingSenderId: "201517071704",
-//   appId: "1:201517071704:web:f18386349818ced992f92d",
-// };
+// var username = (snapshot.val() && snapshot.val().username) || "Anonymous";
+// ...
 
-// firebase.initializeApp(firebaseConfig);
+const saveResults = async (result) => {
+  await db
+    .collection("results")
+    .add(result)
+    .then((docRef) => console.log("Document written with ID: ", docRef.id))
+    .catch((error) => console.error("Error adding document: ", error));
+};
 
-// const createUser = (user) => {
-//   db.collection("quizII")
-//     .add(user)
-//     .then((docRef) => console.log("Document written with ID: ", docRef.id))
-//     .catch((error) => console.error("Error adding document: ", error));
-// };
+const createUser = async (user) => {
+  await db
+    .collection("quizII")
+    .add(user)
+    .then((docRef) => console.log("Document written with ID: ", docRef.id))
+    .catch((error) => console.error("Error adding document: ", error));
+};
 
-// const readAllUsers = (born) => {
-//   db.collection("quizII")
-//     .where("first", "==", born)
-//     .get(user)
-//     .then((querySnapshot) => {
-//       querySnapshot.forEach((user) => {
-//         console.log(user.data());
-//       });
-//     });
-// };
+const readAllUsers = (born) => {
+  db.collection("quizII")
+    .where("first", "==", born)
+    .get(user)
+    .then((querySnapshot) => {
+      querySnapshot.forEach((user) => {
+        console.log(user.data());
+      });
+    });
+};
 
-// const signUpUser = (email, password) => {
-//   firebase
-//     .auth()
-//     .createUserWithEmailAndPassword(email, password)
-//     .then((userCredential) => {
-//       let user = userCredential.user;
-//       alert(`Se ha registrado ${user.email} en el sistema`);
-//       createUser({
-//         id: user.uid,
-//         email: user.email,
-//         message: "hola!",
-//       });
-//     })
-//     .catch((error) => {
-//       console.log("Error en el sistema" + error.message);
-//     });
-// };
+const signUpUser = (email, password) => {
+  firebase
+    .auth()
+    .createUserWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      let user = userCredential.user;
+      alert(`Se ha registrado ${user.email} en el sistema`);
+      createUser({
+        id: user.uid,
+        email: user.email,
+        message: "hola!",
+      });
+    })
+    .catch((error) => {
+      console.log("Error en el sistema" + error.message);
+    });
+};
 
-// const signInUser = (email, password) => {
-//   firebase
-//     .auth()
-//     .signInWithEmailAndPassword(email, password)
-//     .then((userCredential) => {
-//       let user = userCredential.user;
-//       alert(`Se ha logueado correctamente ${user.email}`);
-//       console.log("USER", user);
-//       window.location.href = "./quiz.html";
-//     })
-//     .catch((error) => {
-//       let errorCode = error.code;
-//       let errorMessage = error.message;
-//       console.log(errorCode);
-//       console.log(errorMessage);
-//       alert(`Error en usuario o contraseña`);
-//     });
-// };
+const signInUser = (email, password) => {
+  firebase
+    .auth()
+    .signInWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      let user = userCredential.user;
+      alert(`Se ha logueado correctamente ${user.email}`);
+      console.log("USER", user);
+      window.location.href = "./quiz.html";
+    })
+    .catch((error) => {
+      let errorCode = error.code;
+      let errorMessage = error.message;
+      console.log(errorCode);
+      console.log(errorMessage);
+      alert(`Error en usuario o contraseña`);
+    });
+};
 
 // document.getElementById("form1").addEventListener("submit", function (event) {
 //   event.preventDefault();
@@ -251,3 +310,8 @@ function answersFromLocalStorage() {
 //     console.log("No hay usuarios en el sistema");
 //   }
 // });
+
+// cambiar crea el documento del usuario en la base datos, cuando te registras, score vacio
+// cuando se hace login guardar el email en localoStorage.
+// cuando termina el quiz actualizar el documento del usuario con el score---mirar si se puede en firebase-- metodo para actualizar un objeto en concreto.
+// tenemos el score para grafica
