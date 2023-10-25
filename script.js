@@ -51,10 +51,6 @@ document.addEventListener("DOMContentLoaded", function () {
     nextButton.style.display = "block";
   });
 
-  function processUserDataAndShowChart() {
-    // ... (código para procesar usuarios y mostrar la gráfica)
-  }
-
   nextButton.addEventListener("click", async function () {
     const typeAnswer = document.querySelectorAll('input[type="radio"]:checked');
 
@@ -86,6 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
           const percentage = (score / totalQuestions) * 100;
           const section1 = document.getElementById("results");
           section1.innerHTML = `Has acertado el ${percentage}% de las preguntas`;
+          createChart();
 
           const user = firebase.auth().currentUser;
 
@@ -95,8 +92,8 @@ document.addEventListener("DOMContentLoaded", function () {
             result: correctResponses.length,
           };
           await saveResults(game);
+          await getDataFromFirebase();
         }
-        processUserDataAndShowChart();
       }
     } else {
       alert("Tienes que elegir alguna respuesta");
@@ -190,6 +187,42 @@ const signInUser = (email, password) => {
       alert(`Error en usuario o contraseña`);
     });
 };
+document.getElementById("form1").addEventListener("submit", function (event) {
+  event.preventDefault();
+
+  if (
+    /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(
+      event.target.elements.email.value
+    )
+  ) {
+    var email = event.target.elements.email.value;
+  } else {
+    alert("prueba con otra dirección email,formato no válido");
+  }
+
+  if (
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{6,})/.test(
+      event.target.elements.pass.value
+    )
+  ) {
+    var pass = event.target.elements.pass.value;
+    //contraseña Caracola1!
+  } else {
+    alert("prueba con otra contraseña,formato no válido");
+  }
+
+  if (
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{6,})/.test(
+      event.target.elements.pass2.value
+    )
+  ) {
+    var pass2 = event.target.elements.pass2.value;
+  }
+
+  pass === pass2
+    ? signUpUser(email, pass)
+    : alert("Las contraseñas no coinciden");
+});
 
 document.getElementById("form2").addEventListener("submit", function (event) {
   event.preventDefault();
@@ -206,43 +239,6 @@ firebase.auth().onAuthStateChanged(function (user) {
   }
 });
 
-document.getElementById("form1").addEventListener("click", function (event) {
-  event.preventDefault();
-
-  if (
-    /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(
-      event.target.elements.email.value
-    )
-  ) {
-    var email = event.target.elements.email.value;
-  } else {
-    alert("Pruebe con otra dirección email,formato no válido");
-  }
-
-  if (/^(?=.*[A-Z])(?=.*\d).{6,}$/.test(event.target.elements.pass.value)) {
-    var pass = event.target.elements.pass.value;
-  } else {
-    alert(
-      "La contraseña debe cumplir con los siguientes requisitos:\n" +
-        "- Al menos una letra mayúscula\n" +
-        "- Al menos un número\n" +
-        "- Longitud mínima de 6 caracteres"
-    );
-  }
-
-  if (/^\d.*(?=.{6,})/.test(event.target.elements.pass2.value)) {
-    var pass2 = event.target.elements.pass2.value;
-  } else {
-    alert("Contraseña incorrecta");
-  }
-
-  if (pass === pass2) {
-    signUpUser(email, pass);
-  } else {
-    alert("Las contraseñas no coinciden");
-  }
-});
-
 const signOut = () => {
   let user = firebase.auth().currentUser;
 
@@ -256,3 +252,111 @@ const signOut = () => {
       console.log("Hubo un error: " + error);
     });
 };
+
+const firebaseDataCollection = db.collection("quizII");
+async function getDataFromFirebase() {
+  try {
+    const data = [];
+    const querySnapshot = await firebaseDataCollection.get();
+
+    querySnapshot.forEach((doc) => {
+      const gameData = doc.data();
+      if (typeof gameData.date === "string") {
+        gameData.date = new Date(gameData.date);
+      }
+
+      if (gameData.date instanceof Date) {
+        data.push({
+          date: gameData.date,
+          result: gameData.result || 0,
+        });
+      }
+    });
+
+    if (data.length > 0) {
+      createChart(data);
+    } else {
+      console.log("No se encontraron datos válidos para crear el gráfico.");
+    }
+  } catch (error) {
+    console.log("Error al obtener datos de Firebase: ", error);
+  }
+}
+
+function createChart(data) {
+  const validData = data.filter((game) => game.date instanceof Date);
+  const dates = validData.map((game) => game.date.toDate());
+  const scores = validData.map((game) => game.score);
+
+  var chartData = {
+    labels: dates,
+    series: [scores],
+  };
+
+  var chartOptions = {
+    width: "100%",
+    height: 800,
+    high: Math.max(...scores),
+    low: 0,
+    axisY: {
+      onlyInteger: true,
+      offset: 20,
+    },
+    chartPadding: {
+      top: 50,
+      right: 100,
+      bottom: 1,
+      left: 100,
+    },
+  };
+
+  var responsiveOptions = [
+    [
+      "screen and (min-width: 641px)and (max-width: 1024px)",
+      {
+        showPoint: false,
+        axisX: {
+          labelInterpolationFnc: function (value) {
+            return value.slice(0, 10);
+          },
+        },
+        chartPadding: {
+          top: 50,
+          right: 100,
+          bottom: 1,
+          left: 100,
+        },
+      },
+    ],
+    [
+      "screen and (max-width: 640px)",
+      {
+        showLine: false,
+        axisX: {
+          labelInterpolationFnc: function (value) {
+            return value.slice(0, 10);
+          },
+        },
+        chartPadding: {
+          top: 50,
+          right: 10,
+          bottom: 10,
+          left: 10,
+        },
+      },
+    ],
+  ];
+
+  const chartContainer = document.getElementById("chart2");
+
+  if (data && data.length > 0) {
+    new Chartist.Line(chartContainer, chartData, chartOptions);
+  } else {
+    chartContainer.innerHTML =
+      "No hay datos disponibles para crear el gráfico.";
+  }
+}
+
+getFirebaseData().then((data) => {
+  createChart(data);
+});

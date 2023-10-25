@@ -3,39 +3,33 @@ body {
   text-align: center;
   background-image: url("../imageMain/movinu.gif");
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: 2000px;
 }
 
 main {
   display: block;
   justify-content: center;
-  width: 500px; /* movil first cambiar el tamaño */
-  margin: 20px auto;
+  width: 300px;
+  margin: 60px auto;
   padding: 16px;
-  background-color: #000000dc;
+  background-color: #000000cc;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   font-size: 10px;
   letter-spacing: 1px;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   text-align: center;
   border-radius: 10px;
+  border-color: #000;
   color: #fff;
-  max-height: 600px;
-  min-height: 600px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.448);
 }
 
 .image_prin > img {
-  width: 200px;
-  height: 150px;
+  width: 250px;
+  height: 200px;
 }
 
-.regis {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  gap: 20px; /* Espacio entre los formularios */
-}
+
 
 form {
   background-position: 100px;
@@ -44,11 +38,14 @@ form {
   border-radius: 10px;
   text-align: center;
 }
+form #form1{
+  margin:4px;
+}
 #form1 .input-group {
-  margin: 0;
+  margin: 2px;
 }
 #form2 .input-group {
-  margin: 5px;
+  margin: 2px;
 }
 form > h3 {
   font-size: 18px;
@@ -69,53 +66,59 @@ form > h3 {
 }
 
 
-label {
+/* label {
   display: block;
   font-size: 15px;
-}
+} */
 
 input[type="email"],
 input[type="password"] {
   font-size: 14px;
   border-radius: 8px;
-  border: 4px solid #FF1493;
+  border: 3px solid #FF1493;
   padding: 10px;
   text-align: center;
+  margin-top: 5px;
 }
 
-.input-bottom {
+/* .input-bottom {
   margin-top: 1px;
+} */
+
+
+#button_sigIn{
+  display: flex;
+  flex-direction: column;
+  margin-left: 130px;
+  margin-top: 20px;
+  font-size: 14px;
+  font-weight: bold; 
+  padding: 10px 20px;
+  background-color: #41f6d1;
+  color: black;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.433);
+  border-radius: 8px;
 }
 
-input[type="submit"] {
-  display: block;
-  justify-content: center;
+#button_log{
+  display: flex;
+  flex-direction: column;
+  margin-left: 130px;
+  margin-top: 20px;
   font-size: 14px; 
+  font-weight: bold;
   padding: 10px 20px;
   background-color: #41f6d1;
   color: black;
   border-radius: 8px;
-
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.643);
 }
 
-input[type="button"] {
-  display: block;
-  justify-content: center;
-  font-size: 14px; 
-  padding: 10px 20px;
- margin-top: -10px;
-  background-color: #ff1494;
-  color:whitesmoke;
-  border-radius: 8px;
-
-}
-
-input[type="submit"]:hover, input[type="button"]:hover {
+#button_sigIn:hover, #button_log:hover {
   background-color: gray;
+  color: white;
+  transform: translateY(4px);
 }
-
-
-
 
 
 
@@ -123,9 +126,11 @@ input[type="submit"]:hover, input[type="button"]:hover {
 @media screen and (min-width: 768px) {
   main {
       width: 400px;
-      margin: 30px auto;
+      margin: 50px auto;
       padding: 40px;
       font-size: 18px;
-      max-height: 500px; 
+      max-height: 800px;
+      min-height: 600px;
+     
   }
 }
