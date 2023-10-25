@@ -32,7 +32,7 @@ Para cumplir con los objetivos establecidos, el proyecto debe cumplir con los si
 
 En este proyecto, hemos utilizado **Trello**, una plataforma de gestión de proyectos, para organizar nuestras tareas y objetivos. Trello nos ha proporcionado una forma efectiva de seguir el progreso de nuestro proyecto y coordinar el trabajo en equipo. Hemos creado tarjetas de Trello para representar cada objetivo, tarea o funcionalidad que debemos abordar, lo que nos ha permitido mantener un seguimiento detallado de nuestras metas y plazos.
 
-<img src="../styles/trello.png" width="750" height="450"/>
+<img src="../imageMain/trello.png" width="750" height="450"/>
 
 ## Ramas y Desarrollo de Funcionalidades 🪢
 
