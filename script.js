@@ -1,47 +1,24 @@
+const firebaseConfig = {
+  apiKey: "AIzaSyDlsqX9gEU6ToguhB0yuc1kKTtU93kcBMA",
+  authDomain: "quizii-84a42.firebaseapp.com",
+  projectId: "quizii-84a42",
+  storageBucket: "quizii-84a42.appspot.com",
+  messagingSenderId: "201517071704",
+  appId: "1:201517071704:web:f18386349818ced992f92d",
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db = firebase.firestore();
 
 document.addEventListener("DOMContentLoaded", function () {
-  // BOTON EMPEZAR
   const startButton = document.getElementById("startButton");
-
-  // BOTON SIGUIENTE PREGUNTA
-
-
-function showQuestion(questions, index) {
-  let section = document.querySelector("#question_quiz");
-  let question = questions[index];
-  if (question) {
-    let arrTemplateString = `
-      <h1 class="pregunta">${question.question}</h1>
-      <label><input type="radio" value="${question.correctAnswer}" name="res">${question.correctAnswer}</label>
-      <label><input type="radio" value="${question.incorrectAnswers[0]}" name="res">${question.incorrectAnswers[0]}</label>
-      <label><input type="radio" value="${question.incorrectAnswers[1]}" name="res">${question.incorrectAnswers[1]}</label>
-      <label><input type="radio" value="${question.incorrectAnswers[2]}" name="res">${question.incorrectAnswers[2]}</label>
-    `;
-    section.innerHTML = arrTemplateString;
-  } else {
-    section.innerHTML = "No hay más preguntas.";
-  }
-}
-
-
-// LLAMAR AL EVENTO DE LOS BOTONES EMPEZAR Y SIGUIENTE
-
-document.addEventListener("DOMContentLoaded", function () {
-  //BOTON EMPEZAR
-  const startButton = document.getElementById("startButton");
-
-  //BOTON SIGUIENTE PREGUNTA
-
   const nextButton = document.getElementById("nextButton");
 
-  // REGISTRO DE LA PREGUNTA
   let questionIndex = 0;
-
   let score = 0;
+  let correctResponses = [];
 
-
-
-  // Función INFORMACIÓN API y GUARDAR EN LOCALST
   async function getQuestionsApi() {
     try {
       let response = await fetch(
@@ -56,183 +33,90 @@ document.addEventListener("DOMContentLoaded", function () {
         incorrectAnswers: question.incorrect_answers,
       }));
 
-      // Guarda preguntas en el LocalStorage
       localStorage.setItem("questionsData", JSON.stringify(getInfo));
-
-      localStorage.setItem(
-        "answerCorrect",
-        JSON.stringify(getInfo.correctAnswer)
-      );
-      localStorage.setItem(
-        "answerFalse",
-        JSON.stringify(getInfo.incorrectAnswers)
-      );
-
-
-      // Mostrar la primera pregunta
       showQuestion(getInfo, questionIndex);
     } catch (error) {
       console.log(`Hubo un error: ${error}`);
     }
   }
 
-  // OCULTAR BOTÓN EMPEZAR, TITULO Y MENSAJE BIENVENIDA"
   startButton.addEventListener("click", function () {
     getQuestionsApi();
-
-    // Ocultar botón start game
     startButton.style.display = "none";
-
-    // OCULTAR MENSAJE BIENVENIDA
     const welcomeContainer = document.querySelector("#welcomeContainer");
     welcomeContainer.style.display = "none";
-
-    // MOSTRAR preguntas y respuestas
     const questionContainer = document.querySelector("#playQuiz");
     questionContainer.style.display = "block";
 
-    // MOSTRAR BOTÓN NEXT
     nextButton.style.display = "block";
   });
 
-  // FUNCION PARA MOSTRAR LAS PREGUNTAS
-  nextButton.addEventListener("click", function () {
+  nextButton.addEventListener("click", async function () {
     const typeAnswer = document.querySelectorAll('input[type="radio"]:checked');
-    let correctResponses = [];
-    let incorrectResponses = [];
 
     if (typeAnswer.length === 1) {
       const selectedInput = typeAnswer[0];
       const answer = selectedInput.value;
 
-      const questionsData = getQuestionsFromLocalStorage();
-      const currentQuestion = questionsData[questionIndex];
+      const currentQuestion = getQuestionsFromLocalStorage()[questionIndex];
+      const totalQuestions = getQuestionsFromLocalStorage().length;
 
-      if (answer == currentQuestion.correctAnswer) {
+      if (answer === currentQuestion.correctAnswer) {
         selectedInput.parentNode.classList.add("correct");
-        correctResponses.push(currentQuestion);
         score += 1;
+        correctResponses.push(answer);
       } else {
         selectedInput.parentNode.classList.add("incorrect");
-        incorrectResponses.push(currentQuestion);
       }
-
-      console.log(score);
 
       questionIndex++;
 
-      if (questionIndex < questionsData.length) {
-
-    // Ocultar el botón de inicio
-    startButton.style.display = "none";
-
-    // Ocultar el mensaje de bienvenida
-    const welcomeContainer = document.querySelector("#welcomeContainer");
-    welcomeContainer.style.display = "none";
-
-    // Mostrar el botón "Siguiente Pregunta"
-    nextButton.style.display = "block";
-  });
-
-  // FUNCION PARA MOSTAR LAS PREGUNTAS
-  nextButton.addEventListener("click", function () {
-    // COMPROBAR QUE ALGUNA OPCION HA SIDO SELECCIONADA
-    const typeAnswer = document.querySelectorAll('input[type="radio"]');
-
-    let answerSelected = false;
-    for (let i = 0; i < typeAnswer.length; i++) {
-      if (typeAnswer[i].checked) {
-        answerSelected = true;
-        break;
-      }
-    } // UNA VEZ COMPROBADO Y QUE SEA TRUE REALIZA EL SIGUIENTE CONDICIONAL
-    if (answerSelected) {
-      questionIndex++;
-
-      const questionsData = getQuestionsFromLocalStorage();
-
-      // CONDICIONAL PARA COMPROBAR SI HAY MÁS PREGUNTAS ALMACENADAS
-      if (questionsData && questionIndex < questionsData.length) {
-
-        showQuestion(questionsData, questionIndex);
+      if (questionIndex < totalQuestions) {
+        showQuestion(getQuestionsFromLocalStorage(), questionIndex);
       } else {
         const section = document.getElementById("question_quiz");
         section.innerHTML = "¡HAS TERMINADO LAS PREGUNTAS DE QUIZZYWIZ!";
-
-
-        // OCULTAR BOTÓN NEXT
-
-        // OCULTAMOS BOTÓN NEXT
-
         nextButton.style.display = "none";
+
+        if (questionIndex === totalQuestions) {
+          const percentage = (score / totalQuestions) * 100;
+          const section1 = document.getElementById("results");
+          section1.innerHTML = `Has acertado el ${percentage}% de las preguntas`;
+          createChart();
+
+          const user = firebase.auth().currentUser;
+
+          const game = {
+            user: user.l,
+            date: new Date(),
+            result: correctResponses.length,
+          };
+          await saveResults(game);
+          await getDataFromFirebase();
+        }
       }
     } else {
-      // SI NO HA SIDO SELECCIONADA NINGUNA RESPUESTA
-
       alert("Tienes que elegir alguna respuesta");
     }
   });
-});
 
-// MOSTRAR LAS PREGUNTAS Y RESPUESTAS
-function showQuestion(questions, index) {
-  let section = document.getElementById("question_quiz");
-  let question = questions[index];
-
-  let arrTemplateString = `
-=======
-      alert("Tienes que eleguir alguna respuesta");
-    }
-  });
-
-  // MOSTRAR LAS PREGUNTAS Y RESPUESTAS
   function showQuestion(questions, index) {
     let section = document.getElementById("question_quiz");
     let question = questions[index];
+    // Respuestas orden aleatorio
+    let mixedAnswers = [question.correctAnswer, ...question.incorrectAnswers];
+    mixedAnswers.sort(() => Math.random() - 0.5);
 
     let arrTemplateString = `
-
-    <h1 class="pregunta">${question.question}</h1>
-    <label><input type="radio" value="${question.correctAnswer}" name="res" required>${question.correctAnswer}</label>
-    <label><input type="radio" value="${question.incorrectAnswers[0]}" name="res" required>${question.incorrectAnswers[0]}</label>
-    <label><input type="radio" value="${question.incorrectAnswers[1]}" name="res" required>${question.incorrectAnswers[1]}</label>
-    <label><input type="radio" value="${question.incorrectAnswers[2]}" name="res" required>${question.incorrectAnswers[2]}</label>
-  `;
-
-  section.innerHTML = arrTemplateString;
-}
-
-function getQuestionsFromLocalStorage() {
-  let questionsData = localStorage.getItem("questionsData");
-  if (questionsData) {
-    return JSON.parse(questionsData);
-  }
-  return null;
-}
-
-function answersFromLocalStorage() {
-  let answerData = localStorage.getItem("answerCorrect");
-  if (answerData) {
-    return JSON.parse(answerCorrect);
-  }
-  return null;
-}
-
-function answersFromLocalStorage() {
-  let answerFal = localStorage.getItem("answerFalse");
-  if (answerFal) {
-    return JSON.parse(answerFal);
-  }
-  return null;
-}
-// *********    FALTA VERIFICAR LAS RESPUESTAS ************ //
-
-// ***** CONSEGUIR DEJAR SELECIONADA UNA RESPUESTA CON EL COLOR ****** //
-
+                <h3 class="pregunta">${question.question}</h3>
+                <label><input type="radio" value="${mixedAnswers[0]}" name="res" required>${mixedAnswers[0]}</label>
+                <label><input type="radio" value="${mixedAnswers[1]}" name="res" required>${mixedAnswers[1]}</label>
+                <label><input type="radio" value="${mixedAnswers[2]}" name="res" required>${mixedAnswers[2]}</label>
+                <label><input type="radio" value="${mixedAnswers[3]}" name="res" required>${mixedAnswers[3]}</label>
+            `;
     section.innerHTML = arrTemplateString;
   }
 
-  // Función para obtener preguntas desde el LocalStorage
   function getQuestionsFromLocalStorage() {
     let questionsData = localStorage.getItem("questionsData");
     if (questionsData) {
@@ -240,122 +124,113 @@ function answersFromLocalStorage() {
     }
     return null;
   }
+
+  // MIRAR AUTH
+
+  const saveResults = async (result) => {
+    console.log("Valores que se van a guardar en Firestore:", result);
+    await db
+      .collection("quizII")
+      .add(result)
+      .then((docRef) => console.log("Document written with ID: ", docRef.id))
+      .catch((error) => console.error("Error adding document: ", error));
+  };
 });
 
-// *********    FALTA VERIFICAR LAS RESPUESTAS ************ //
+const createUser = (user) => {
+  db.collection("quizII")
+    .add(user)
+    .then((docRef) => console.log("Document written with ID: ", docRef.id))
+    .catch((error) => console.error("Error adding document: ", error));
+};
 
-// ***** PENSAR EN COMO QUITAR EL ESPACIO QUE SE VE DONDE VAN LAS PREGUNTAS, RESPUESTAS Y BOTON
-//       ANTES DE QUE SE PULSE GO ***** //
+const readAllUsers = (born) => {
+  db.collection("quizII")
+    .where("first", "==", born)
+    .get(user)
+    .then((querySnapshot) => {
+      querySnapshot.forEach((user) => {
+        console.log(user.data());
+      });
+    });
+};
 
+const signUpUser = (email, password) => {
+  firebase
+    .auth()
+    .createUserWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      let user = userCredential.user;
+      alert(`Se ha registrado ${user.email} en el sistema`);
+      createUser(game);
+    })
+    .catch((error) => {
+      console.log("Error en el sistema" + error.message);
+    });
+};
 
-// FUNCIONALIDAD LOGIN
+const signInUser = (email, password) => {
+  firebase
+    .auth()
+    .signInWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      let user = userCredential.user;
+      alert(`Se ha logueado correctamente ${user.email}`);
+      console.log("USER", user);
+      window.location.href = "./quiz.html";
+    })
+    .catch((error) => {
+      let errorCode = error.code;
+      let errorMessage = error.message;
+      console.log(errorCode);
+      console.log(errorMessage);
+      alert(`Error en usuario o contraseña`);
+    });
+};
+document.getElementById("form1").addEventListener("submit", function (event) {
+  event.preventDefault();
 
-// const firebaseConfig = {
-//   apiKey: "AIzaSyDlsqX9gEU6ToguhB0yuc1kKTtU93kcBMA",
-//   authDomain: "quizii-84a42.firebaseapp.com",
-//   projectId: "quizii-84a42",
-//   storageBucket: "quizii-84a42.appspot.com",
-//   messagingSenderId: "201517071704",
-//   appId: "1:201517071704:web:f18386349818ced992f92d",
-// };
+  if (
+    /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(
+      event.target.elements.email.value
+    )
+  ) {
+    var email = event.target.elements.email.value;
+  } else {
+    alert("prueba con otra dirección email,formato no válido");
+  }
 
-// firebase.initializeApp(firebaseConfig);
+  if (
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{6,})/.test(
+      event.target.elements.pass.value
+    )
+  ) {
+    var pass = event.target.elements.pass.value;
+    //contraseña Caracola1!
+  } else {
+    alert("prueba con otra contraseña,formato no válido");
+  }
 
-// const createUser = (user) => {
-//   db.collection("quizII")
-//     .add(user)
-//     .then((docRef) => console.log("Document written with ID: ", docRef.id))
-//     .catch((error) => console.error("Error adding document: ", error));
-// };
+  if (
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{6,})/.test(
+      event.target.elements.pass2.value
+    )
+  ) {
+    var pass2 = event.target.elements.pass2.value;
+  }
 
-// const readAllUsers = (born) => {
-//   db.collection("quizII")
-//     .where("first", "==", born)
-//     .get(user)
-//     .then((querySnapshot) => {
-//       querySnapshot.forEach((user) => {
-//         console.log(user.data());
-//       });
-//     });
-// };
+  pass === pass2
+    ? signUpUser(email, pass)
+    : alert("Las contraseñas no coinciden");
+});
 
-// const signUpUser = (email, password) => {
-//   firebase
-//     .auth()
-//     .createUserWithEmailAndPassword(email, password)
-//     .then((userCredential) => {
-//       let user = userCredential.user;
-//       alert(`Se ha registrado ${user.email} en el sistema`);
-//       createUser({
-//         id: user.uid,
-//         email: user.email,
-//         message: "hola!",
-//       });
-//     })
-//     .catch((error) => {
-//       console.log("Error en el sistema" + error.message);
-//     });
-// };
+document.getElementById("form2").addEventListener("submit", function (event) {
+  event.preventDefault();
+  let email = event.target.elements.email2.value;
+  let pass = event.target.elements.pass3.value;
+  signInUser(email, pass);
+});
 
-// const signInUser = (email, password) => {
-//   firebase
-//     .auth()
-//     .signInWithEmailAndPassword(email, password)
-//     .then((userCredential) => {
-//       let user = userCredential.user;
-//       alert(`Se ha logueado correctamente ${user.email}`);
-//       console.log("USER", user);
-//       window.location.href = "./quiz.html";
-//     })
-//     .catch((error) => {
-//       let errorCode = error.code;
-//       let errorMessage = error.message;
-//       console.log(errorCode);
-//       console.log(errorMessage);
-//       alert(`Error en usuario o contraseña`);
-//     });
-// };
-
-// document.getElementById("form1").addEventListener("submit", function (event) {
-//   event.preventDefault();
-//   let email = event.target.elements.email.value;
-//   let pass = event.target.elements.pass.value;
-//   let pass2 = event.target.elements.pass2.value;
-
-//   pass === pass2
-//     ? signUpUser(email, pass)
-//     : alert("Las contraseñas no coinciden");
-// });
-
-// const signOut = () => {
-//   let user = firebase.auth().currentUser;
-
-//   firebase
-//     .auth()
-//     .signOut()
-//     .then(() => {
-//       console.log("Sale del sistema: " + user.email);
-//     })
-//     .catch((error) => {
-//       console.log("Hubo un error: " + error);
-//     });
-// };
-
-// document.getElementById("form2").addEventListener("submit", function (event) {
-//   event.preventDefault();
-//   let email = event.target.elements.email2.value;
-//   let pass = event.target.elements.pass3.value;
-//   signInUser(email, pass);
-// });
-
-
-// firebase.auth().onAuthStateChanged(function (user) {
-//   if (user) {
-//     console.log(`Está en el sistema:${user.email} ${user.uid}`);
-//   } else {
-//     console.log("No hay usuarios en el sistema");
-//   }
-// });
 firebase.auth().onAuthStateChanged(function (user) {
   if (user) {
     console.log(`Está en el sistema:${user.email} ${user.uid}`);
@@ -364,5 +239,124 @@ firebase.auth().onAuthStateChanged(function (user) {
   }
 });
 
+const signOut = () => {
+  let user = firebase.auth().currentUser;
 
+  firebase
+    .auth()
+    .signOut()
+    .then(() => {
+      console.log("Sale del sistema: " + user.email);
+    })
+    .catch((error) => {
+      console.log("Hubo un error: " + error);
+    });
+};
 
+const firebaseDataCollection = db.collection("quizII");
+async function getDataFromFirebase() {
+  try {
+    const data = [];
+    const querySnapshot = await firebaseDataCollection.get();
+
+    querySnapshot.forEach((doc) => {
+      const gameData = doc.data();
+      if (typeof gameData.date === "string") {
+        gameData.date = new Date(gameData.date);
+      }
+
+      if (gameData.date instanceof Date) {
+        data.push({
+          date: gameData.date,
+          result: gameData.result || 0,
+        });
+      }
+    });
+
+    if (data.length > 0) {
+      createChart(data);
+    } else {
+      console.log("No se encontraron datos válidos para crear el gráfico.");
+    }
+  } catch (error) {
+    console.log("Error al obtener datos de Firebase: ", error);
+  }
+}
+
+function createChart(data) {
+  const validData = data.filter((game) => game.date instanceof Date);
+  const dates = validData.map((game) => game.date.toDate());
+  const scores = validData.map((game) => game.score);
+
+  var chartData = {
+    labels: dates,
+    series: [scores],
+  };
+
+  var chartOptions = {
+    width: "100%",
+    height: 800,
+    high: Math.max(...scores),
+    low: 0,
+    axisY: {
+      onlyInteger: true,
+      offset: 20,
+    },
+    chartPadding: {
+      top: 50,
+      right: 100,
+      bottom: 1,
+      left: 100,
+    },
+  };
+
+  var responsiveOptions = [
+    [
+      "screen and (min-width: 641px)and (max-width: 1024px)",
+      {
+        showPoint: false,
+        axisX: {
+          labelInterpolationFnc: function (value) {
+            return value.slice(0, 10);
+          },
+        },
+        chartPadding: {
+          top: 50,
+          right: 100,
+          bottom: 1,
+          left: 100,
+        },
+      },
+    ],
+    [
+      "screen and (max-width: 640px)",
+      {
+        showLine: false,
+        axisX: {
+          labelInterpolationFnc: function (value) {
+            return value.slice(0, 10);
+          },
+        },
+        chartPadding: {
+          top: 50,
+          right: 10,
+          bottom: 10,
+          left: 10,
+        },
+      },
+    ],
+  ];
+
+  const chartContainer = document.getElementById("chart2");
+
+  if (data && data.length > 0) {
+    new Chartist.Line(chartContainer, chartData, chartOptions);
+  } else {
+    chartContainer.innerHTML =
+      "No hay datos disponibles para crear el gráfico.";
+  }
+}
+
+getFirebaseData().then((data) => {
+  createChart(data);
+});
