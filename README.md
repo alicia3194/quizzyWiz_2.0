@@ -1,4 +1,4 @@
-# QuizzyWiz 2.0 🎮🎮
+# 🎮 QuizzyWiz 2.0 🎮
 
 
 El proyecto **QuizzyWiz 2.0** tiene como objetivo principal proporcionar una experiencia de cuestionario interactiva y educativa. El Quiz constará de 10 preguntas, cada una de las cuales tendrá 4 opciones de respuesta, de las cuales solo una será la correcta. Estas preguntas pueden ser tanto generadas internamente como importadas desde la **API** de preguntas en línea **OpenTDB**.
@@ -37,5 +37,17 @@ En este proyecto, hemos utilizado **Trello**, una plataforma de gestión de proy
 ## Ramas y Desarrollo de Funcionalidades 🪢
 
 Para mantener nuestro proyecto organizado y garantizar un desarrollo seguro, hemos empleado un enfoque de ramas en nuestro repositorio de Git. Cada funcionalidad o característica importante se ha desarrollado en su propia rama separada antes de fusionarse con la rama principal *main*.
+
+## Posibles Mejoras 💪
+
+El proyecto actual es un punto de partida sólido, pero hay espacio para mejoras y características adicionales. Aquí hay algunas sugerencias para futuras mejoras:
+
+### 1. Gráfica de Resultados de Jugadores
+
+Actualmente, el proyecto almacena los resultados del juego en Firebase, pero no muestra gráficos para visualizar el progreso de los jugadores. Puedes considerar la implementación de una gráfica que muestre los resultados históricos de un jugador en comparación con el tiempo. Esto proporcionará una visión más detallada del rendimiento de un jugador.
+
+### 2. Ranking de Jugadores
+
+Otra característica interesante podría ser la creación de un sistema de clasificación o ranking para los jugadores. Esto podría basarse en el número de preguntas correctas o en el porcentaje de respuestas correctas. Mostrar una tabla de clasificación con los nombres de usuario y sus posiciones en el ranking puede agregar una dimensión competitiva al juego.
 
 
