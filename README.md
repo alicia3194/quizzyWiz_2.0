@@ -50,6 +50,10 @@ Actualmente, el proyecto almacena los resultados del juego en Firebase, pero no 
 
 Otra característica interesante podría ser la creación de un sistema de clasificación o ranking para los jugadores. Esto podría basarse en el número de preguntas correctas o en el porcentaje de respuestas correctas. Mostrar una tabla de clasificación con los nombres de usuario y sus posiciones en el ranking puede agregar una dimensión competitiva al juego.
 
-### 3. Resaltar respuestas marcadas: Cuando el usuario selecciona una respuesta a una pregunta, resaltar visualmente la respuesta que han seleccionado. 
+### 3. Resaltar respuestas marcadas:
 
-### 4. Indicar respuesta correcta: Después de que el usuario responda a una pregunta, proporcionar retroalimentación sobre si su respuesta fue correcta o incorrecta. 
+Cuando el usuario selecciona una respuesta a una pregunta, resaltar visualmente la respuesta que han seleccionado. 
+
+### 4. Indicar respuesta correcta: 
+
+Después de que el usuario responda a una pregunta, proporcionar retroalimentación sobre si su respuesta fue correcta o incorrecta. 
