@@ -26,7 +26,7 @@ Para cumplir con los objetivos establecidos, el proyecto debe cumplir con los si
 
 - *Código limpio y buenas prácticas:* El código se mantendrá limpio y se seguirán buenas prácticas de desarrollo de software para garantizar la legibilidad, mantenibilidad y escalabilidad del proyecto.
 
-- *Desplegar la app en GitHub Pages:* La aplicación se desplegará en GitHub Pages para que sea accesible en línea.
+- *Desplegar la app en GitHub Pages:* La aplicación se desplegará en GitHub Pages para que sea accesible en línea. Puedes acceder a la versión en línea del proyecto a través del siguiente enlace: (https://alicia3194.github.io/quizzyWiz_2.0/)
 
 ## Organización del Proyecto 💬
 
@@ -50,4 +50,6 @@ Actualmente, el proyecto almacena los resultados del juego en Firebase, pero no 
 
 Otra característica interesante podría ser la creación de un sistema de clasificación o ranking para los jugadores. Esto podría basarse en el número de preguntas correctas o en el porcentaje de respuestas correctas. Mostrar una tabla de clasificación con los nombres de usuario y sus posiciones en el ranking puede agregar una dimensión competitiva al juego.
 
+### 3. Resaltar respuestas marcadas: Cuando el usuario selecciona una respuesta a una pregunta, resaltar visualmente la respuesta que han seleccionado. 
 
+### 4. Indicar respuesta correcta: Después de que el usuario responda a una pregunta, proporcionar retroalimentación sobre si su respuesta fue correcta o incorrecta. 
