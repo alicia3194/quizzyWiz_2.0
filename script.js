@@ -1,3 +1,4 @@
+// Configuración de Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyDlsqX9gEU6ToguhB0yuc1kKTtU93kcBMA",
   authDomain: "quizii-84a42.firebaseapp.com",
@@ -19,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let score = 0;
   let correctResponses = [];
 
+  // Función asincrónica para obtener preguntas de una API externa
   async function getQuestionsApi() {
     try {
       let response = await fetch(
@@ -26,20 +28,21 @@ document.addEventListener("DOMContentLoaded", function () {
       );
       let data = await response.json();
       let objQuestions = data.results;
-
+      // Mapea los datos de las preguntas para guardarlos en el almacenamiento local
       let getInfo = objQuestions.map((question) => ({
         question: question.question,
         correctAnswer: question.correct_answer,
         incorrectAnswers: question.incorrect_answers,
       }));
-
+      // Almacena los datos de las preguntas en el almacenamiento local
       localStorage.setItem("questionsData", JSON.stringify(getInfo));
+      // Muestra la primera pregunta
       showQuestion(getInfo, questionIndex);
     } catch (error) {
       console.log(`Hubo un error: ${error}`);
     }
   }
-
+  // Evento botón de inicio
   startButton.addEventListener("click", function () {
     getQuestionsApi();
     startButton.style.display = "none";
@@ -50,8 +53,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     nextButton.style.display = "block";
   });
-
+  // evento para el botón next
   nextButton.addEventListener("click", async function () {
+    // Obtiene las respuestas seleccionadas por el usuario
     const typeAnswer = document.querySelectorAll('input[type="radio"]:checked');
 
     if (typeAnswer.length === 1) {
@@ -62,16 +66,19 @@ document.addEventListener("DOMContentLoaded", function () {
       const totalQuestions = getQuestionsFromLocalStorage().length;
 
       if (answer === currentQuestion.correctAnswer) {
+        // Marca la respuesta como correcta y actualiza la puntuación
         selectedInput.parentNode.classList.add("correct");
         score += 1;
         correctResponses.push(answer);
       } else {
+        // Marca la respuesta como incorrecta
         selectedInput.parentNode.classList.add("incorrect");
       }
 
       questionIndex++;
 
       if (questionIndex < totalQuestions) {
+        // Muestra la siguiente pregunta
         showQuestion(getQuestionsFromLocalStorage(), questionIndex);
       } else {
         const section = document.getElementById("question_quiz");
@@ -85,6 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
           createChart();
 
           const user = firebase.auth().currentUser;
+          // objeto juego y lo guarda en Firestore
 
           const game = {
             user: user.l,
@@ -99,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
       alert("Tienes que elegir alguna respuesta");
     }
   });
-
+  // Función para mostrar una pregunta en la interfaz
   function showQuestion(questions, index) {
     let section = document.getElementById("question_quiz");
     let question = questions[index];
@@ -116,7 +124,7 @@ document.addEventListener("DOMContentLoaded", function () {
             `;
     section.innerHTML = arrTemplateString;
   }
-
+  // Función para obtener preguntas desde el almacenamiento local
   function getQuestionsFromLocalStorage() {
     let questionsData = localStorage.getItem("questionsData");
     if (questionsData) {
@@ -127,6 +135,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // MIRAR AUTH
 
+  // Función asincrónica para guardar resultados en Firestore
+
   const saveResults = async (result) => {
     console.log("Valores que se van a guardar en Firestore:", result);
     await db
@@ -136,6 +146,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .catch((error) => console.error("Error adding document: ", error));
   };
 });
+// Función para leer todos los usuarios que coinciden con un criterio en Firestore
 
 const createUser = (user) => {
   db.collection("quizII")
@@ -187,6 +198,8 @@ const signInUser = (email, password) => {
       alert(`Error en usuario o contraseña`);
     });
 };
+
+// evento para el formulario de registro de usuario
 document.getElementById("form1").addEventListener("submit", function (event) {
   event.preventDefault();
 
@@ -223,6 +236,8 @@ document.getElementById("form1").addEventListener("submit", function (event) {
     ? signUpUser(email, pass)
     : alert("Las contraseñas no coinciden");
 });
+
+// evento para el formulario de inicio de sesión de usuario
 
 document.getElementById("form2").addEventListener("submit", function (event) {
   event.preventDefault();
@@ -283,80 +298,81 @@ async function getDataFromFirebase() {
   }
 }
 
-function createChart(data) {
-  const validData = data.filter((game) => game.date instanceof Date);
-  const dates = validData.map((game) => game.date.toDate());
-  const scores = validData.map((game) => game.score);
+// // *******  SIN TERMINAR LÓGICA GRÁFICAS
+// function createChart(data) {
+//   const validData = data.filter((game) => game.date instanceof Date);
+//   const dates = validData.map((game) => game.date.toDate());
+//   const scores = validData.map((game) => game.score);
 
-  var chartData = {
-    labels: dates,
-    series: [scores],
-  };
+//   var chartData = {
+//     labels: dates,
+//     series: [scores],
+//   };
 
-  var chartOptions = {
-    width: "100%",
-    height: 800,
-    high: Math.max(...scores),
-    low: 0,
-    axisY: {
-      onlyInteger: true,
-      offset: 20,
-    },
-    chartPadding: {
-      top: 50,
-      right: 100,
-      bottom: 1,
-      left: 100,
-    },
-  };
+//   var chartOptions = {
+//     width: "100%",
+//     height: 800,
+//     high: Math.max(...scores),
+//     low: 0,
+//     axisY: {
+//       onlyInteger: true,
+//       offset: 20,
+//     },
+//     chartPadding: {
+//       top: 50,
+//       right: 100,
+//       bottom: 1,
+//       left: 100,
+//     },
+//   };
 
-  var responsiveOptions = [
-    [
-      "screen and (min-width: 641px)and (max-width: 1024px)",
-      {
-        showPoint: false,
-        axisX: {
-          labelInterpolationFnc: function (value) {
-            return value.slice(0, 10);
-          },
-        },
-        chartPadding: {
-          top: 50,
-          right: 100,
-          bottom: 1,
-          left: 100,
-        },
-      },
-    ],
-    [
-      "screen and (max-width: 640px)",
-      {
-        showLine: false,
-        axisX: {
-          labelInterpolationFnc: function (value) {
-            return value.slice(0, 10);
-          },
-        },
-        chartPadding: {
-          top: 50,
-          right: 10,
-          bottom: 10,
-          left: 10,
-        },
-      },
-    ],
-  ];
+//   var responsiveOptions = [
+//     [
+//       "screen and (min-width: 641px)and (max-width: 1024px)",
+//       {
+//         showPoint: false,
+//         axisX: {
+//           labelInterpolationFnc: function (value) {
+//             return value.slice(0, 10);
+//           },
+//         },
+//         chartPadding: {
+//           top: 50,
+//           right: 100,
+//           bottom: 1,
+//           left: 100,
+//         },
+//       },
+//     ],
+//     [
+//       "screen and (max-width: 640px)",
+//       {
+//         showLine: false,
+//         axisX: {
+//           labelInterpolationFnc: function (value) {
+//             return value.slice(0, 10);
+//           },
+//         },
+//         chartPadding: {
+//           top: 50,
+//           right: 10,
+//           bottom: 10,
+//           left: 10,
+//         },
+//       },
+//     ],
+//   ];
 
-  const chartContainer = document.getElementById("chart2");
+//   const chartContainer = document.getElementById("chart2");
 
-  if (data && data.length > 0) {
-    new Chartist.Line(chartContainer, chartData, chartOptions);
-  } else {
-    chartContainer.innerHTML =
-      "No hay datos disponibles para crear el gráfico.";
-  }
-}
+//   if (data && data.length > 0) {
+//     new Chartist.Line(chartContainer, chartData, chartOptions);
+//   } else {
+//     chartContainer.innerHTML =
+//       "No hay datos disponibles para crear el gráfico.";
+//   }
+// }
 
-getFirebaseData().then((data) => {
-  createChart(data);
-});
+// getFirebaseData().then((data) => {
+//   createChart(data);
+// });
